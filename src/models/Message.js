@@ -7,7 +7,7 @@ const MessageSchema = new Schema(
         senderId: {type: Schema.Types.ObjectId, ref: 'User'},
         channelId: {type: Schema.Types.ObjectId, ref: 'Channel'},
         content: String,
-        attachment: String,
+        attachmentId: String,
         stickerId: String,
     },
     {

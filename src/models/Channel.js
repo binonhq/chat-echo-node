@@ -10,7 +10,11 @@ const ChannelSchema = new Schema(
             enum: ['direct', 'group'],
             default: 'direct',
         },
+        seenBy: [{type: Schema.Types.ObjectId, ref: 'User', default: []}],
+        onCall: {type: Boolean, default: false},
         name: String,
+        notification: [{type: Schema.Types.ObjectId, ref: 'Notification', default: []}],
+        avatarId: String,
     },
     {
         timestamps: true,

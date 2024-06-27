@@ -8,7 +8,12 @@ const UserSchema = new Schema(
         lastName: String,
         email: {type: String, unique: true},
         password: String,
-        avatar: String,
+        avatarId: String,
+        voiceSettingId: String,
+        inCall: {type: Boolean, default: false},
+        about: String,
+        phone: String,
+        coverId: String,
     },
     {
         timestamps: true,

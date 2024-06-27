@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-export async function getUserDataFromRequest(req, res) {
+export function getUserDataFromRequest(req, res) {
     return new Promise((resolve, reject) => {
         const token = req.headers['authorization'];
         if (token) {
@@ -11,7 +11,7 @@ export async function getUserDataFromRequest(req, res) {
                         "isAuthenticated": false,
                         "message": "Unauthorized"
                     });
-                    return
+                    reject();
                 }
                 const userDoc = await User.findOne({email: userData.email});
                 if (!userDoc) {
@@ -19,7 +19,7 @@ export async function getUserDataFromRequest(req, res) {
                         "isAuthenticated": false,
                         "message": "Unauthorized"
                     });
-                    return
+                    reject()
                 }
 
                 resolve(userDoc);
@@ -35,10 +35,11 @@ export async function getUserDataFromRequest(req, res) {
 }
 
 export function getChannelName(currentUser, channel) {
+    if (channel.type === 'group') return channel.name
+
     const userIdsBuf = channel.userIds
     const userIds = JSON.parse(JSON.stringify(userIdsBuf))
     if (!userIds || !userIds.length) return 'Unknown'
-    if (userIds.length > 2) return channel.name
     const otherUser = userIds.filter(u => u.email !== currentUser.email)[0]
 
     return otherUser.firstName + ' ' + otherUser.lastName
