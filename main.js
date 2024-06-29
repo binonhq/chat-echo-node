@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import connectMongoDB from "./src/configs/database/mongo.js";
+import connectMongoDB from "./src/services/database/mongo.js";
 import logger from "./src/utils/logger/logger.js";
 import createRoutes from "./src/routes/index.js";
-import initWebSocketServer from "./src/configs/websocket/websocket.js";
+import initWebSocketServer from "./src/services/websocket/websocket.js";
 import {GridFSBucket, MongoClient, ObjectId} from "mongodb";
 import multer from 'multer';
 import sharp from 'sharp';
@@ -15,7 +15,6 @@ import Channel from "./src/models/Channel.js";
 
 dotenv.config();
 const port = process.env.PORT || 8080;
-const host = process.env.HOST || 'localhost';
 
 connectMongoDB().then(() => {
     logger.info("Connected to MongoDB successfully!");
@@ -27,7 +26,7 @@ const mongodb = new MongoClient(process.env.MONGODB_URI);
 await mongodb.connect();
 const database = mongodb.db('chat-echo');
 
-const voiceSettingBucket = new GridFSBucket(database, {
+export const voiceSettingBucket = new GridFSBucket(database, {
     bucketName: 'voice_settings'
 });
 
@@ -112,7 +111,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             name: originalName,
             size: webpBuffer.length,
             type: file.mimetype,
-            userId: userDoc._id,
+            userId: userDoc._id.valueOf(),
             channelId: channelId || null,
         }
     });
@@ -121,7 +120,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         try {
             await User.updateOne({_id: userDoc._id}, {voiceSettingId: uploadStream.id});
         } catch (error) {
-            return res.status(500).send('Error updating voice setting user ID: ' + userDoc._id);
+            return res.status(500).send('Error updating voice setting user ID: ' + userDoc._id.valueOf());
         }
     }
 
@@ -129,7 +128,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         try {
             await User.updateOne({_id: userDoc._id}, {avatarId: uploadStream.id});
         } catch (error) {
-            return res.status(500).send('Error updating avatar user ID: ' + userDoc._id);
+            return res.status(500).send('Error updating avatar user ID: ' + userDoc._id.valueOf());
         }
     }
 
@@ -137,7 +136,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         try {
             await User.updateOne({_id: userDoc._id}, {coverId: uploadStream.id});
         } catch (error) {
-            return res.status(500).send('Error updating cover user ID: ' + userDoc._id);
+            return res.status(500).send('Error updating cover user ID: ' + userDoc._id.valueOf());
         }
     }
 
@@ -179,7 +178,6 @@ app.get('/voice-settings', async (req, res) => {
         });
     }
 
-    res.setHeader('Content-Type', 'application/json');
     const settings = files.map(file => ({
         filename: file.filename,
         id: file._id,
@@ -232,8 +230,8 @@ app.get('/attachments/:id', async (req, res) => {
     }
 });
 
-const server = app.listen(port, host, () => {
-    logger.info(`Node server listening at http://${host}:${port}`);
+const server = app.listen(port, () => {
+    logger.info(`Node server listening at ${port}`);
 });
 
 initWebSocketServer({server});

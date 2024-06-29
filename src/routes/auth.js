@@ -10,5 +10,9 @@ router.get('/current-user', jwtMiddleware, controller.currentUser);
 router.put('/update_voice', jwtMiddleware, controller.updateVoiceSetting);
 router.put('/update_password', jwtMiddleware, controller.updatePassword);
 router.put('/update_profile', jwtMiddleware, controller.updateProfile);
+router.delete('/delete_voice_setting', jwtMiddleware, controller.removeVoiceSetting);
+router.put('/publish_voice_setting', jwtMiddleware, controller.publishVoiceSetting);
+router.post('/clone_voice_setting', jwtMiddleware, controller.cloneVoiceSetting);
+router.post('/give_feedback', jwtMiddleware, controller.giveFeedback);
 
 export default router;

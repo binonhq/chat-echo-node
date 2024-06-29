@@ -14,6 +14,7 @@ const UserSchema = new Schema(
         about: String,
         phone: String,
         coverId: String,
+        privateVoiceSettings: [String],
     },
     {
         timestamps: true,

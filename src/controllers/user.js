@@ -1,5 +1,6 @@
 import {getUserDataFromRequest} from "../utils/utils.js";
 import User from "../models/User.js";
+import Feedback from "../models/Feedback.js";
 
 class UserController {
     // [GET] /user
@@ -41,14 +42,28 @@ class UserController {
                 "message": "User ID is required"
             });
         }
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({
-                "message": "User not found"
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({
+                    "message": "User not found"
+                });
+            }
+
+            const feedbacks = await Feedback.find({user: userId}).populate('createdBy').sort({createdAt: -1});
+
+            res.json({
+                user,
+                feedbacks
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                "message": "Internal server error"
             });
         }
-        res.json(user);
     }
+
 }
 
 export default new UserController();
