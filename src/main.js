@@ -230,7 +230,7 @@ app.get('/attachments/:id', async (req, res) => {
     }
 });
 
-const server = app.listen(port, () => {
+export const server = app.listen(port, () => {
     logger.info(`Node server listening at ${port}`);
 });
 
