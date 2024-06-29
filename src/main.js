@@ -190,6 +190,21 @@ app.get('/voice-settings', async (req, res) => {
     });
 });
 
+app.get('/voice-settings/:id', async (req, res) => {
+    const {id} = req.params;
+    try {
+        const objectId = new ObjectId(id);
+        const file = await voiceSettingBucket.find({"_id": objectId}).toArray();
+        if (!file.length) {
+            return res.status(404).send('File not found.');
+        }
+
+        voiceSettingBucket.openDownloadStream(objectId).pipe(res);
+    } catch (error) {
+        logger.error(error);
+    }
+});
+
 app.get('/images/:id', async (req, res) => {
     const {id} = req.params;
     try {
