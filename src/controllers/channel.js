@@ -4,7 +4,7 @@ import {getChannelName, getUserDataFromRequest} from "../utils/utils.js";
 import Message from "../models/Message.js";
 import User from "../models/User.js";
 import ChannelNotification from "../models/ChannelNotification.js";
-import {attachmentBucket} from "../../main.js";
+import {attachmentBucket} from "../main.js";
 
 class ChannelController {
     // [POST] /channels

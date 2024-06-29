@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {RESPONSE_STATUS} from "../constants/constants.js";
 import User from "../models/User.js";
 import {getUserDataFromRequest} from "../utils/utils.js";
-import {voiceSettingBucket} from "../../main.js";
+import {voiceSettingBucket} from "../main.js";
 import {ObjectId} from "mongodb";
 import Feedback from "../models/Feedback.js";
 

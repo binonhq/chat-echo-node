@@ -2,10 +2,13 @@
   "name": "chat-echo-node",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main.js",
   "type": "module",
   "scripts": {
-    "start": "node -r dotenv/config main.js --env-file=.env "
+    "start": "node -r dotenv/config src/main.js --env-file=.env "
+  },
+  "engines": {
+    "node": "14.x"
   },
   "keywords": [],
   "author": "",
