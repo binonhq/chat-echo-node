@@ -40,7 +40,7 @@ class ChannelController {
         }
 
         if (userIds.length === 2) {
-            let channel = await Channel.findOne({userIds: {$all: userIds}}).populate('userIds');
+            let channel = await Channel.findOne({userIds: {$all: userIds, $size: 2}}).populate('userIds');
             if (channel) {
                 name = getChannelName(currentUser, channel);
                 res.json({
@@ -52,7 +52,6 @@ class ChannelController {
                 return;
             }
         }
-
 
         let type = MessageType.GROUP;
         if (userIds.length <= 2) {
