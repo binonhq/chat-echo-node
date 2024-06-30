@@ -341,7 +341,7 @@ export default function initWebSocketServer(server) {
                 return
             }
             for (const c1 of [...webSocket.clients]
-                .filter(c => channel.userIds.includes(c.user._id) && c.user._id.valueOf() !== senderId)) {
+                .filter(c => channel.userIds.includes(c.user?._id) && c.user._id.valueOf() !== senderId)) {
                 c1.send(JSON.stringify({
                     type: 'peer-signal',
                     data: {

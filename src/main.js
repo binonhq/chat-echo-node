@@ -249,6 +249,4 @@ export const server = app.listen(port, () => {
     logger.info(`Node server listening at ${port}`);
 });
 
-export default app;
-
 initWebSocketServer({server});
