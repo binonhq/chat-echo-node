@@ -80,7 +80,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const file = req.file;
 
     const originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
-    const filePath = (new Date().getTime()) + "-" + originalName.replace(/\.[^/.]+$/, "") + ".webp";
+    const filePath = (new Date().getTime()) + "-" + originalName;
 
     let bucket;
 

@@ -147,7 +147,7 @@ export default function initWebSocketServer(server) {
             const sender = await User.findById(senderId);
 
             for (const c1 of [...webSocket.clients]
-                .filter(c => channel.userIds.includes(c.user._id))) {
+                .filter(c => channel.userIds.includes(c.user?._id) || channel.userIds.includes(c.user?.userId))) {
                 const channels = await Channel.find({userIds: c1.user._id}).populate('userIds');
 
                 const channelReturn = (await Promise.all(channels.map(async channel => {
