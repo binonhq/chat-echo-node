@@ -52,7 +52,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: '*'
+    credentials: true,
+    origin: 'https://chat-echo-cli.vercel.app' // Your Vercel app's URL
 }));
 
 createRoutes(app);
