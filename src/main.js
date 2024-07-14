@@ -12,6 +12,9 @@ import sharp from 'sharp';
 import User from "./models/User.js";
 import {getUserDataFromRequest} from "./utils/utils.js";
 import Channel from "./models/Channel.js";
+import * as fs from "node:fs";
+import * as https from "node:https";
+import * as http from "node:http";
 
 dotenv.config();
 const port = process.env.PORT || 8080;
@@ -245,8 +248,26 @@ app.get('/attachments/:id', async (req, res) => {
     }
 });
 
-export const server = app.listen(port, () => {
-    logger.info(`Node server listening at ${port}`);
-});
+const sslKeyPath = process.env.SSL_KEY_PATH;
+const sslCertPath = process.env.SSL_CERT_PATH;
+
+const isHttps =sslCertPath && sslKeyPath &&  fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath);
+export let server
+
+if (isHttps) {
+    const options = {
+        key: fs.readFileSync(sslKeyPath),
+        cert: fs.readFileSync(sslCertPath)
+    };
+
+    server = https.createServer(options, app).listen(443, () => {
+        logger.info('Server is running on port 443 with HTTPS');
+    });
+} else {
+    server = http.createServer(app).listen(port, 'localhost', () => {
+        logger.info(`Server is running on http://localhost:${port}`);
+    });
+}
+
 
 initWebSocketServer({server});
